@@ -2,8 +2,8 @@ from .schedule import Schedule
 from .task import Task, ScheduledTask
 from .timeslot import TimeSlot
 from typing import List, Tuple
-import random
 import numpy as np
+import random
 
 
 class Chromosome:

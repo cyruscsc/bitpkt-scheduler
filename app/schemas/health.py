@@ -7,6 +7,8 @@ class HealthCheck(BaseModel):
 
     model_config = {
         "json_schema_extra": {
-            "examples": [{"status": "healthy", "timestamp": "2025-03-08T12:00:00.000000"}]
+            "examples": [
+                {"status": "healthy", "timestamp": "2025-03-08T12:00:00.000000"}
+            ]
         }
     }

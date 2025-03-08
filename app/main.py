@@ -1,38 +1,22 @@
-from app.scheduler import TaskSchedulingApp
-from app.schemas import HealthCheck, Schedule, ScheduleRequest
-from datetime import datetime
-from fastapi import FastAPI, HTTPException
+from app.router import router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 
-app = FastAPI()
+app = FastAPI(
+    title="bitpkt-scheduler",
+    description="An AI-powered task scheduler",
+    version="1.0.0",
+)
 
+origins = ["*"]
 
-@app.get("/health", response_model=HealthCheck)
-async def health_check():
-    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-
-@app.post("/schedule", response_model=Schedule)
-async def optimize_schedule(request: ScheduleRequest):
-    try:
-        # Validate datetime strings by parsing them
-        for time_slot in request.times:
-            try:
-                datetime.fromisoformat(time_slot.start)
-                datetime.fromisoformat(time_slot.end)
-            except ValueError:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Invalid datetime format. Use ISO format (YYYY-MM-DDTHH:MM:SS)",
-                )
-
-        # Convert Pydantic models to dictionaries for the TaskSchedulingApp
-        tasks = [task.model_dump() for task in request.tasks]
-        times = [time_slot.model_dump() for time_slot in request.times]
-
-        # Call the optimize_schedule method
-        schedule = TaskSchedulingApp.optimize_schedule(tasks, times)
-
-        return schedule
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+app.include_router(router)
