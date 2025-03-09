@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  scheduler:
+    # image: bitpkt-scheduler:latest
+    image: <registry-domain>/bitpkt-scheduler:latest
+    platform: linux/amd64
+    container_name: bitpkt-scheduler
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

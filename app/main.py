@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(
     title="bitpkt-scheduler",
     description="An AI-powered task scheduler",
-    version="1.0.0",
+    version="0.1.0",
 )
 
 origins = ["*"]
